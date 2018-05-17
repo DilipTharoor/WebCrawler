@@ -23,8 +23,7 @@ public interface CrawlInfoRepository extends CrudRepository<UrlInfoEntity, Long>
      * @return the next entity to consider for parsing
      */
     @Query("select entity from UrlInfoEntity entity where entity.depth = " +
-            "(select MIN(entity.depth) from UrlInfoEntity entity where entity.parseCompleted = false) and " +
-            "entity.parseCompleted = false")
+            "(select MIN(entity.depth) from UrlInfoEntity entity where entity.parseCompleted = false)")
     List<UrlInfoEntity> findNextEligibleUrl(Pageable limit);
 
     List<UrlInfoEntity> findByUrl(String url);

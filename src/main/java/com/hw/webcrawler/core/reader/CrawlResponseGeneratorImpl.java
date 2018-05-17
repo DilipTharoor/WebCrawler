@@ -41,17 +41,19 @@ public class CrawlResponseGeneratorImpl implements CrawlResponseGenerator{
 
         logger.info("Started reading crawled data from DB ...");
 
+        readIds.clear();
+
         Optional<UrlInfoEntity> urlInfoEntities = crawlInfoRepository.findById(id);
 
         if(!urlInfoEntities.isPresent()) {
             throw new WebCrawlerException("The id:"+id+" provided was not correct");
         }
 
-        return new CrawlReadResponse(fetchCrawlData(urlInfoEntities.get()));
+        return new CrawlReadResponse(fetchCrawlData(urlInfoEntities.get(), 1));
 
     }
 
-    private CrawlData fetchCrawlData(UrlInfoEntity urlInfoEntity) throws IOException {
+    private CrawlData fetchCrawlData(UrlInfoEntity urlInfoEntity, int depth) throws IOException {
 
         readIds.add(urlInfoEntity.getId());
 
@@ -69,21 +71,20 @@ public class CrawlResponseGeneratorImpl implements CrawlResponseGenerator{
             if (!idList.isEmpty()) {
 
                 // Get the id for each link
-                Long id = idList.get(0).getId();
+                UrlInfoEntity entity = idList.get(0);
+
+                if(entity.getDepth() != depth) {
+                    continue;
+                }
 
                 // If the link is already read then do not call recursively
-                if (readIds.contains(id)) {
-                    nodes.add(new CrawlData(null, link, null));
+                if (readIds.contains(entity.getId())) {
                     continue;
                 }
 
                 // call the link recursively
-                nodes.add(fetchCrawlData(crawlInfoRepository.findById(id).get()));
+                nodes.add(fetchCrawlData(crawlInfoRepository.findById(entity.getId()).get(), depth+1));
 
-            } else {
-
-                //
-                nodes.add(new CrawlData(null, link, null));
             }
         }
 

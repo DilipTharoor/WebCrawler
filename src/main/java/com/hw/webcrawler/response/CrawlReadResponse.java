@@ -9,17 +9,17 @@ import com.hw.webcrawler.core.reader.CrawlData;
  */
 public class CrawlReadResponse implements ResponseBase {
 
-    private CrawlData crawlDataResponse;
+    private CrawlData crawledData;
 
     public CrawlReadResponse(CrawlData urlInfo) {
-        this.crawlDataResponse = urlInfo;
+        this.crawledData = urlInfo;
     }
 
-    public CrawlData getCrawlDataResponse() {
-        return crawlDataResponse;
+    public CrawlData getCrawledData() {
+        return crawledData;
     }
 
-    public void setCrawlDataResponse(CrawlData crawlDataResponse) {
-        this.crawlDataResponse = crawlDataResponse;
+    public void setCrawledData(CrawlData crawledData) {
+        this.crawledData = crawledData;
     }
 }

@@ -5,24 +5,19 @@ import com.hw.webcrawler.entity.UrlInfoEntity;
 import com.hw.webcrawler.exception.WebCrawlerException;
 import com.hw.webcrawler.repository.CrawlInfoRepository;
 import com.hw.webcrawler.response.CrawlReadResponse;
-import org.hibernate.service.spi.InjectService;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 /**
@@ -44,6 +39,7 @@ public class CrawlResponseGeneratorImplTest {
         UrlInfoEntity entity = new UrlInfoEntity();
         entity.setTitle("title");
         entity.setUrl("url");
+        entity.setDepth(1);
 
         List<String> links = new ArrayList<>();
         links.add("link1");
@@ -55,14 +51,12 @@ public class CrawlResponseGeneratorImplTest {
 
         CrawlReadResponse crawlReadResponse = crawlResponseGenerator.generateResponse(1L);
 
-        CrawlData crawlData = crawlReadResponse.getCrawlDataResponse();
+        CrawlData crawlData = crawlReadResponse.getCrawledData();
 
         Assert.assertEquals(crawlData.getTitle(), "title");
         Assert.assertEquals(crawlData.getUrl(), "url");
 
-        Assert.assertEquals(crawlData.getNodes().get(0).getUrl(), "link1");
-        Assert.assertNull(crawlData.getNodes().get(0).getTitle());
-        Assert.assertNull(crawlData.getNodes().get(0).getNodes());
+        Assert.assertTrue(crawlData.getNodes().isEmpty());
 
     }
 }

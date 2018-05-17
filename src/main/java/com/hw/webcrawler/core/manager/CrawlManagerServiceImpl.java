@@ -156,9 +156,7 @@ public class CrawlManagerServiceImpl implements CrawlManagerService {
 
     private Long persisToDB(PersistData urlInfo, int depth) throws JsonProcessingException {
 
-        UrlInfoEntity entity;
-
-        entity = new UrlInfoEntity();
+        UrlInfoEntity entity = new UrlInfoEntity();
 
         entity.setUrl(urlInfo.getUrl());
         entity.setTitle(urlInfo.getTitle());
@@ -183,7 +181,7 @@ public class CrawlManagerServiceImpl implements CrawlManagerService {
         }
 
         // the entity which contains the links that needs to be parsed next
-        UrlInfoEntity urlInfoEntity = crawlInfoRepository.findNextEligibleUrl(new PageRequest(0, 1)).get(0);
+        UrlInfoEntity urlInfoEntity = crawlInfoRepository.findNextEligibleUrl(PageRequest.of(0, 1)).get(0);
 
         // Starting the next level in the BFS search
         int depth = urlInfoEntity.getDepth() + 1;

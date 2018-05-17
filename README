@@ -54,7 +54,7 @@ Postman or curl to hit the endpoints for the api
 Running the application
 =======================
 
-Run the application either using any IDE (prefer IntelliJ) or on command line : "gradle clean build bootRun"
+Run the application either using any IDE (prefer IntelliJ) or on command line : "./gradlew clean build bootRun"
 
 The application will run on port number 9999, change the server.port field in application.properties
 to change this
@@ -81,10 +81,21 @@ Get the id from the previous step and paste it in the curl request.  Below examp
 
 curl -X GET http://localhost:9999/api/url/7078
 
+This will return the crawled data at that point in time.  This might not be the complete data.  Running the curl command
+again after some more time will give you the complete data.
+
 Extra step
 To stop the crawling at any point if the crawling is taking a long time
 
 curl -X POST http://localhost:9999/api/url/stop
 
 Even if the crawling is stopped using this command, step 2 can still be executed to fetch the json 
-content with the root id returned in step 1.  
+content with the root id returned in step 1.
+
+
+Points to improve (Not included because of time limit)
+========================================
+1. Show the current status of the crawling by saying whether it is completed or not
+2. Have a nosql database since we are not using complex queries on the db and maybe persist it to a db when the in
+   memory data exceeds a limit.
+3. More test coverage
