@@ -30,7 +30,7 @@ class SwaggerConfig {
     public Docket webCrawlerApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hw.com.com.hw.webcrawler.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.hw.webcrawler.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .pathMapping("/")
@@ -47,7 +47,7 @@ class SwaggerConfig {
                 .title("Web Crawler REST API")
                 .description("The REST API provided by the Web Crawler application.")
                 .version("1.0.0")
-                .contact(new Contact("Administrator", "", "admin@hw.com.au"))
+                .contact(new Contact("Dilip Tharoor", "https://github.com/DilipTharoor", "tharoor.dilip@gmail.com"))
                 .build();
     }
 }
