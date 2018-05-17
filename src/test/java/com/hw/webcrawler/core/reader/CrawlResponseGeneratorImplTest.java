@@ -5,17 +5,24 @@ import com.hw.webcrawler.entity.UrlInfoEntity;
 import com.hw.webcrawler.exception.WebCrawlerException;
 import com.hw.webcrawler.repository.CrawlInfoRepository;
 import com.hw.webcrawler.response.CrawlReadResponse;
+import org.hibernate.service.spi.InjectService;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 /**
@@ -25,8 +32,7 @@ import static org.mockito.Mockito.when;
 public class CrawlResponseGeneratorImplTest {
 
     @InjectMocks
-    private
-    CrawlResponseGeneratorImpl crawlResponseGenerator;
+    private CrawlResponseGeneratorImpl crawlResponseGenerator;
 
     @Mock
     private CrawlInfoRepository crawlInfoRepository;
@@ -34,7 +40,7 @@ public class CrawlResponseGeneratorImplTest {
     @Test
     public void test_generateResponse() throws IOException, WebCrawlerException {
 
-        List<UrlInfoEntity> urlInfoEntityList = new ArrayList<>();
+        Optional<UrlInfoEntity> urlInfoEntity;
         UrlInfoEntity entity = new UrlInfoEntity();
         entity.setTitle("title");
         entity.setUrl("url");
@@ -43,9 +49,9 @@ public class CrawlResponseGeneratorImplTest {
         links.add("link1");
 
         entity.setLinks(JsonConfiguration.JSON_MAPPER.writeValueAsString(links));
-        urlInfoEntityList.add(entity);
+        urlInfoEntity = Optional.of(entity);
 
-        when(crawlInfoRepository.findById(1L)).thenReturn(urlInfoEntityList);
+        when(crawlInfoRepository.findById(any())).thenReturn(urlInfoEntity);
 
         CrawlReadResponse crawlReadResponse = crawlResponseGenerator.generateResponse(1L);
 

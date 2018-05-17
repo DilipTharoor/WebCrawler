@@ -8,7 +8,7 @@ import javax.persistence.*;
  * @author Dilip Tharoor
  */
 @Entity
-@Table(name = "crawlerinfo", schema = "middleware")
+@Table(name = "crawlerinfo", schema = "crawl")
 public class UrlInfoEntity {
 
     @Id

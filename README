@@ -1,0 +1,90 @@
+=================================================================================================
+                                           WEB CRAWLER
+=================================================================================================
+A simple web crawler which allows the user to crawl the web from a starting link to any depth.
+
+=================================================================================================
+ASSUMPTIONS
+=================================================================================================
+
+Given a URL and a depth, the application crawls the web till all the links reaches the depth
+mentioned in the request.  The crawling is done in a breadth first fashion.
+
+Design
+======
+
+Starting from the first url mentioned in the request, which will be at depth 0, it fetches all the
+links in the page and writes into DB.
+
+A thread pool is initiated after this first url.
+
+Every thread then takes a link from first entity which has all the links read from the first page.
+Every thread parses the link and persists the data read from the url into the DB.
+This continues till all the links are parsed till the maximum depth.
+
+Before taking each link every thread checks whether
+1.  the url is already read by another thread already ( by checking that there is an id associated
+    with the URL in DB)
+2.  the url has a depth less than the max depth mentioned in the request.
+
+This could have been done without constant access to DB, but keeping all the content in memory is
+not a good idea for this situation because for each url parsed, the amount of urls next to be
+parsed increases exponentially.
+
+Current design makes sure that the application will run with the assigned number of queues
+without ever utilizing all the memory.
+
+When more memory is available, more queues can be added by modifying the properties to increase
+the active count and also the queue size.
+
+=================================================================================================
+Getting Started
+=================================================================================================
+Prerequisites
+
+Java 1.8
+
+Postgres 10.1 with following credentials
+user        :   crawlee
+password    :   iltvol6
+database    :   crawlerdb
+
+Postman or curl to hit the endpoints for the api
+
+Running the application
+=======================
+
+Run the application either using any IDE (prefer IntelliJ) or on command line : "gradle clean build bootRun"
+
+The application will run on port number 9999, change the server.port field in application.properties
+to change this
+
+The api is exposed via swagger endpoint accessible via : http://localhost:9999/swagger-ui.html
+
+Running the application will create all the required tables and schema using flyway.
+
+To test the workflow with curl commands
+========================================
+
+Step 1. To trigger the crawl for a url : 'https://en.wikipedia.org/wiki/Main_Page' to a depth of 2
+
+curl -X POST http://localhost:9999/api/url \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "url": "https://en.wikipedia.org/wiki/Main_Page",
+    "depth": 2
+}'
+The above curl request will return an id for the root url to use in the next step
+
+Step 2. To get the crawled data .
+Get the id from the previous step and paste it in the curl request.  Below example with id : 7078
+
+curl -X GET http://localhost:9999/api/url/7078
+
+Extra step
+To stop the crawling at any point if the crawling is taking a long time
+
+curl -X POST http://localhost:9999/api/url/stop
+
+Even if the crawling is stopped using this command, step 2 can still be executed to fetch the json 
+content with the root id returned in step 1.  

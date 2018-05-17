@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * CrawlInfoRepository is the DAO for {@link UrlInfoEntity} based on Spring Data JPA.
@@ -28,6 +29,6 @@ public interface CrawlInfoRepository extends CrudRepository<UrlInfoEntity, Long>
 
     List<UrlInfoEntity> findByUrl(String url);
 
-    List<UrlInfoEntity> findById(long id);
+    Optional<UrlInfoEntity> findById(long id);
 
 }

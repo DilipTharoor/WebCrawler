@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@inheritDoc}
@@ -44,13 +41,13 @@ public class CrawlResponseGeneratorImpl implements CrawlResponseGenerator{
 
         logger.info("Started reading crawled data from DB ...");
 
-        List<UrlInfoEntity> urlInfoEntities = crawlInfoRepository.findById(id);
+        Optional<UrlInfoEntity> urlInfoEntities = crawlInfoRepository.findById(id);
 
-        if(urlInfoEntities.isEmpty()) {
-            throw new WebCrawlerException("The "+id+" provided was not correct");
+        if(!urlInfoEntities.isPresent()) {
+            throw new WebCrawlerException("The id:"+id+" provided was not correct");
         }
 
-        return new CrawlReadResponse(fetchCrawlData(urlInfoEntities.get(0)));
+        return new CrawlReadResponse(fetchCrawlData(urlInfoEntities.get()));
 
     }
 
@@ -81,7 +78,7 @@ public class CrawlResponseGeneratorImpl implements CrawlResponseGenerator{
                 }
 
                 // call the link recursively
-                nodes.add(fetchCrawlData(crawlInfoRepository.findById(id).get(0)));
+                nodes.add(fetchCrawlData(crawlInfoRepository.findById(id).get()));
 
             } else {
 

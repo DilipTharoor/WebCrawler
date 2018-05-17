@@ -1,6 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS middleware;
+CREATE SCHEMA IF NOT EXISTS crawl;
 
-CREATE TABLE IF NOT EXISTS middleware.crawlerinfo
+CREATE TABLE IF NOT EXISTS crawl.crawlerinfo
 (
     id bigserial NOT NULL,
     url CHARACTER VARYING(2083),
