@@ -93,9 +93,9 @@ Even if the crawling is stopped using this command, step 2 can still be executed
 content with the root id returned in step 1.
 
 
-Points to improve (Not included because of time limit)
+Possible improvements for the next couple of commits
 ========================================
 1. Show the current status of the crawling by saying whether it is completed or not
-2. Have a nosql database since we are not using complex queries on the db and maybe persist it to a db when the in
-   memory data exceeds a limit.
-3. More test coverage
+2. Have a nosql database since we are not using complex queries on the db and maybe persist it to a db when the in-memory
+   data exceeds a limit.
+3. Increase the test coverage
